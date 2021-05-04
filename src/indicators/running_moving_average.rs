@@ -28,10 +28,10 @@ use serde::{Deserialize, Serialize};
 /// use ta::Next;
 ///
 /// let mut rma = RunningMovingAverage::new(3).unwrap();
-/// assert_eq!(rma.next(&bar(4.0)), 0.0);
-/// assert_eq!(rma.next(&bar(4.0)), 0.0);
-/// assert_eq!(rma.next(&bar(7.0)), 5.0);
-/// assert_eq!(rma.next(&bar(1.0)), 11.0 / 3.0);
+/// assert_eq!(rma.next(4.0), 4.0);
+/// assert_eq!(rma.next(4.0), 4.0);
+/// assert_eq!(rma.next(7.0), 5.0);
+/// assert_eq!(rma.next(1.0), 11.0 / 3.0);
 /// ```
 ///
 /// # Links
@@ -77,7 +77,7 @@ impl Next<f64> for RunningMovingAverage {
         let res = match self.count {
             i if i < self.period => {
                 self.sum += input;
-                0.0
+                self.sum / self.count as f64
             }
             i if i == self.period => (self.sum + input) / (self.period as f64),
             _ => (self.prev * (self.period - 1) as f64 + input) / (self.period as f64),
@@ -132,9 +132,9 @@ mod tests {
     #[test]
     fn test_next() {
         let mut rma = RunningMovingAverage::new(4).unwrap();
-        assert_eq!(rma.next(4.0), 0.0);
-        assert_eq!(rma.next(5.0), 0.0);
-        assert_eq!(rma.next(6.0), 0.0);
+        assert_eq!(rma.next(4.0), 4.0);
+        assert_eq!(rma.next(5.0), 4.5);
+        assert_eq!(rma.next(6.0), 5.0);
         assert_eq!(rma.next(6.0), 5.25); // 21 / 4
         assert_eq!(rma.next(6.0), 5.4375); // (21 / 4 * 3 + 6) / 4
         assert_eq!(rma.next(6.0), 5.578125);
@@ -148,8 +148,8 @@ mod tests {
         }
 
         let mut rma = RunningMovingAverage::new(3).unwrap();
-        assert_eq!(rma.next(&bar(4.0)), 0.0);
-        assert_eq!(rma.next(&bar(4.0)), 0.0);
+        assert_eq!(rma.next(&bar(4.0)), 4.0);
+        assert_eq!(rma.next(&bar(4.0)), 4.0);
         assert_eq!(rma.next(&bar(7.0)), 5.0);
         assert_eq!(rma.next(&bar(1.0)), 11.0 / 3.0);
     }
@@ -157,12 +157,12 @@ mod tests {
     #[test]
     fn test_reset() {
         let mut rma = RunningMovingAverage::new(4).unwrap();
-        assert_eq!(rma.next(4.0), 0.0);
-        assert_eq!(rma.next(5.0), 0.0);
-        assert_eq!(rma.next(6.0), 0.0);
+        assert_eq!(rma.next(4.0), 4.0);
+        assert_eq!(rma.next(5.0), 4.5);
+        assert_eq!(rma.next(6.0), 5.0);
 
         rma.reset();
-        assert_eq!(rma.next(99.0), 0.0);
+        assert_eq!(rma.next(99.0), 99.0);
     }
 
     #[test]
