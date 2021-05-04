@@ -25,6 +25,12 @@ pub trait Next<T> {
     fn next(&mut self, input: T) -> Self::Output;
 }
 
+pub trait NewWithPeriod {
+    fn with_period(period: usize) -> crate::errors::Result<Self>
+    where
+        Self: Sized;
+}
+
 /// Open price of a particular period.
 pub trait Open {
     fn open(&self) -> f64;

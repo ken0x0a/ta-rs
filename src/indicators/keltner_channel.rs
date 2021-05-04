@@ -52,7 +52,7 @@ use serde::{Deserialize, Serialize};
 pub struct KeltnerChannel {
     period: usize,
     multiplier: f64,
-    atr: AverageTrueRange,
+    atr: AverageTrueRange<ExponentialMovingAverage>,
     ema: ExponentialMovingAverage,
 }
 

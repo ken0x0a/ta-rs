@@ -1,9 +1,27 @@
 use std::fmt;
 
-use crate::helpers::max3;
+use crate::{errors::Result, helpers::max3, NewWithPeriod};
 use crate::{Close, High, Low, Next, Reset};
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
+
+use super::{ExponentialMovingAverage, RunningMovingAverage, SimpleMovingAverage};
+
+impl NewWithPeriod for ExponentialMovingAverage {
+    fn with_period(period: usize) -> Result<Self> {
+        Self::new(period)
+    }
+}
+impl NewWithPeriod for SimpleMovingAverage {
+    fn with_period(period: usize) -> Result<Self> {
+        Self::new(period)
+    }
+}
+impl NewWithPeriod for RunningMovingAverage {
+    fn with_period(period: usize) -> Result<Self> {
+        Self::new(period)
+    }
+}
 
 /// The range of a day's trading is simply _high_ - _low_.
 /// The true range extends it to yesterday's closing price if it was outside of today's range.

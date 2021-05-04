@@ -7,6 +7,8 @@ use crate::errors::Result;
 use crate::indicators::{AverageTrueRange, Maximum, Minimum};
 use crate::{Close, High, Low, Next, Period, Reset};
 
+use super::ExponentialMovingAverage;
+
 /// Chandelier Exit (CE).
 ///
 /// Developed by Charles Le Beau and featured in Alexander Elder's books, the Chandelier Exit sets
@@ -54,7 +56,7 @@ use crate::{Close, High, Low, Next, Period, Reset};
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone)]
 pub struct ChandelierExit {
-    atr: AverageTrueRange,
+    atr: AverageTrueRange<ExponentialMovingAverage>,
     min: Minimum,
     max: Maximum,
     multiplier: f64,
