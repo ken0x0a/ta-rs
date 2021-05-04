@@ -34,6 +34,9 @@ pub use self::true_range::TrueRange;
 mod average_true_range;
 pub use self::average_true_range::AverageTrueRange;
 
+mod natr;
+pub use self::natr::NormalizedAverageTrueRange;
+
 mod moving_average_convergence_divergence;
 pub use self::moving_average_convergence_divergence::{
     MovingAverageConvergenceDivergence, MovingAverageConvergenceDivergenceOutput,
